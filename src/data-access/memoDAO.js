@@ -31,25 +31,34 @@ class memoDAO {
   }
 
   async findByDueDate(date) {
-
-    const startOfDay = new Date(date);
-    startOfDay.setHours(0, 0, 0, 0);
-
-    const endOfDay = new Date(date);
-    endOfDay.setHours(23, 59, 59, 999);
+    const localDate = new Date(date);
+    const offset = 9 * 60; // KST는 UTC+9, 즉 540분
   
+    // KST 시간으로 시작과 끝 날짜 생성
+    const startOfDayLocal = new Date(localDate);
+    startOfDayLocal.setHours(0, 0, 0, 0);
+    
+    const endOfDayLocal = new Date(localDate);
+    endOfDayLocal.setHours(23, 59, 59, 999);
+    
+    // KST에서 UTC로 변환
+    const startOfDayUTC = new Date(startOfDayLocal.getTime() - offset * 60 * 1000);
+    const endOfDayUTC = new Date(endOfDayLocal.getTime() - offset * 60 * 1000);
+    
+    // UTC 시간대로 쿼리
     const notes = await Note.find({
-      dueDate: { $gte: startOfDay, $lt: endOfDay }
+      dueDate: { $gte: startOfDayUTC, $lt: endOfDayUTC }
     }).lean();
-  
+    
     const checklists = await Checklist.find({
-      dueDate: { $gte: startOfDay, $lt: endOfDay }
+      dueDate: { $gte: startOfDayUTC, $lt: endOfDayUTC }
     }).lean();
-  
+    
     const allMemoes = [...notes, ...checklists];
-  
+    
     return allMemoes.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
   }
+  
 
   async updateMemo(id, updateData) {
     if (updateData.type === "Note") {
