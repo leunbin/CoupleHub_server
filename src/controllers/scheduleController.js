@@ -59,7 +59,7 @@ const scheduleController = {
       res.status(200).json({
         success: true,
         message: "update schedule successfully 😊",
-        data: updateMemo,
+        data: updateSchedule,
       });
     } catch(error) {
       next(error);

@@ -40,6 +40,7 @@ class ScheduleDAO {
   
 
   async updateSchedule(id, updateData) {
+    console.log(id, updateData);
     const schedule = await Schedule.findByIdAndUpdate(id, updateData).lean();
     return schedule;
   }
