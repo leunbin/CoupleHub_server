@@ -23,6 +23,10 @@ const memoSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    private : {
+      type:Boolean,
+      default: false,
+    },
     createdDate: {
       type: Date,
       default: Date.now,
