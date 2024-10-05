@@ -3,7 +3,7 @@ const socketIO = require('socket.io');
 module.exports = (server) => {
   const io = socketIO(server, {
     cors: {
-      origin: ["https://my-sns-client.vercel.app", "http://localhost:3000"],
+      origin: ["https://my-sns-client.vercel.app", "http://localhost:3000", "https://couple-hub-client.vercel.app"],
     },
   });
 
